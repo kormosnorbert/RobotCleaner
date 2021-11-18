@@ -2,7 +2,7 @@
   <artifact type="jar" build-on-make="true" name="VacuumCleaner:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/VacuumCleaner_jar</output-path>
     <root id="archive" name="VacuumCleaner.jar">
-      <element id="module-output" name="VacuumCleaner" />
+      <element id="module-output" name="RobotVacuumCleaner" />
     </root>
   </artifact>
 </component>
