@@ -5,7 +5,7 @@ public class FloorTile extends Tile {
     private boolean cleaned;
 
     public FloorTile() {
-        super(':');
+        super(": ");
     }
 
     public boolean isCleaned() {
@@ -23,6 +23,6 @@ public class FloorTile extends Tile {
     */
     public void cleanTile(){
         this.cleaned = true;
-        super.setVisual(' ');
+        super.setVisual("  ");
     }
 }

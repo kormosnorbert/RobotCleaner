@@ -1,6 +1,9 @@
 package eu.kormos.robotcleaner;
 
 
+import java.lang.reflect.Array;
+import java.util.*;
+
 public class RobotLogic {
 
     private Robot robot;
@@ -23,43 +26,68 @@ public class RobotLogic {
         }
     }
 
-    public void goToPosition(Robot robot, Position position) {
+    public void goToPosition(Robot robot, Position targetPosition) {
 
-        while (!(robot.getPosition().equals(position))) {
-            Position nextPosition = getLowestNumberPosition();
-            Position moveVector = new Position(
-                    robot.getPosition().getX()- nextPosition.getX(),
-                    robot.getPosition().getY() -nextPosition.getY()
-            );
-            rotateToDirection(robot, moveVector);
-            robot.moveForward();
+        while (!(robot.getPosition().equals(targetPosition))) {
+            Position nextPosition = getAdjacentMinPosition(targetPosition,robot.getPosition());
+            goToNextPosition(nextPosition);
         }
     }
+    private Position getAdjacentMinPosition(Position targetPosition,Position robotPosition) {
+        FloodFiller floodFiller = new FloodFiller();
+        Map<Position, Integer> positionDistanceMap = floodFiller.floodFillPathFind(targetPosition);
+        Map<Position,Integer> adjacentPositions = new HashMap<>();
 
-    private Position getLowestNumberPosition() {
-        return new Position(robot.getPosition().getX(),robot.getPosition().getY()+1);
+        for (Position pos: getAdjacentPositions(robotPosition)) {
+            if(positionDistanceMap.containsKey(pos))
+            adjacentPositions.put(pos,positionDistanceMap.get(pos));
+        }
+        Position min = Collections.min(adjacentPositions.entrySet(), Map.Entry.comparingByValue()).getKey();
+        System.out.println(min);
+        System.out.println(adjacentPositions);
+        return min;
+
     }
+    public List<Position> getAdjacentPositions(Position position){
+        List<Position> adjacentPositions = new ArrayList<>();
+        adjacentPositions.add(new Position(position.getX()+1, position.getY()));
+        adjacentPositions.add(new Position(position.getX()-1, position.getY()));
+        adjacentPositions.add(new Position(position.getX(), position.getY()+1));
+        adjacentPositions.add(new Position(position.getX(), position.getY()-1));
+        return adjacentPositions;
+    }
+
+    private void goToNextPosition(Position nextPosition){
+        Position moveVector = new Position(
+                nextPosition.getX()-robot.getPosition().getX(),
+                nextPosition.getY()- robot.getPosition().getY()
+        );
+        rotateToDirection(robot, moveVector);
+        robot.moveForward();
+    }
+
 
     private void rotateToDirection(Robot robot, Position moveVector) {
 
         int targetRotation = 0;
 
-        if (moveVector.equals(new Position(0, -1))) {
+        if (moveVector.equals(new Position(0, 1))) {
             targetRotation = 90;
         }
         if (moveVector.equals(new Position(-1, 0))) {
             targetRotation = 180;
         }
-        if (moveVector.equals(new Position(0, 1))) {
+        if (moveVector.equals(new Position(0, -1))) {
             targetRotation = 270;
         }
         while (robot.getRotation() != targetRotation) {
-            if (robot.getRotation() == 0 && targetRotation == 270) {
+            if ((robot.getRotation() == 0 && targetRotation == 270)) {
                 robot.rotateLeft();
-            } else if (robot.getRotation() < targetRotation) {
+            } else if (robot.getRotation() < targetRotation || (robot.getRotation() == 270 && targetRotation == 0)) {
                 robot.rotateRight();
+            } else{
+                robot.rotateLeft();
             }
-
         }
     }
 

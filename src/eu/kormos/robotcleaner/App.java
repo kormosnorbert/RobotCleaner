@@ -26,13 +26,15 @@ public class App {
 
     public void run() throws InterruptedException {
         room = Room.getInstance();
+        //room.generateRectangularRoom(30,30);
         room.generateRoomWithWalls(50, 20);
         robot = new Robot(new Position(5, 5), 0, 'O');
         graphics.setRenderedRobot(robot);
         graphics.render();
 
         RobotLogic robotLogic = new RobotLogic(robot);
-        robotLogic.goToPosition(robot, new Position(robot.getPosition().getX(), robot.getPosition().getY() + 1));
+        //robotLogic.goToPosition(robot, new Position(robot.getPosition().getX(), robot.getPosition().getY() + 1));
+        robotLogic.goToPosition(robot,new Position(15,14));
         //robotLogic.floodFillAlgorithm(new Position(robot.getPosition().getX(), robot.getPosition().getY()));
 
         graphics.render();

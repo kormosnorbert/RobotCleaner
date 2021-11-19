@@ -59,7 +59,7 @@ public final class Graphics {
         int robY = robot.getPosition().getY();
 
         StringBuilder sb = new StringBuilder(layout.get(robY));
-        sb.setCharAt(robX, robot.getVisual());
+        sb.setCharAt(robX*2, robot.getVisual());
         layout.set(robY, sb.toString());
     }
 

@@ -2,15 +2,15 @@ package eu.kormos.robotcleaner;
 
 public class Tile {
 
-    private char visual;
-    protected Tile(char visual){
+    private String visual;
+    protected Tile(String visual){
         this.visual = visual;
     }
-    public char getVisual() {
+    public String getVisual() {
         return visual;
     }
 
-    public void setVisual(char visual) {
+    public void setVisual(String visual) {
         this.visual = visual;
     }
 }
