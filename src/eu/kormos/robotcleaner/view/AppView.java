@@ -1,60 +1,61 @@
-package eu.kormos.robotcleaner;
+package eu.kormos.robotcleaner.view;
+
+import eu.kormos.robotcleaner.model.GraphicsModel;
+import eu.kormos.robotcleaner.model.TileChart;
+import eu.kormos.robotcleaner.model.Robot;
+import eu.kormos.robotcleaner.model.Tile;
 
 import javax.swing.*;
 import java.awt.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Graphics {
-
+public class AppView {
 
     private JTextArea textArea;
     private JPanel panel;
-    static Graphics instance;
-    static List<String> layout;
-    eu.kormos.robotcleaner.Robot robot;
+    private List<String> layout;
+    private Robot robot;
 
-    private Graphics() {
-        JFrame frame = new JFrame("AppFx");
+    private static AppView instance;
+    private GraphicsModel graphicsModel;
+
+    private AppView() {
+        JFrame frame = new JFrame("Application");
         frame.setContentPane(panel);
         frame.setSize(1000, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+
     }
 
-    public void setRenderedRobot(eu.kormos.robotcleaner.Robot robot) {
-        this.robot = robot;
-    }
-
-    public static Graphics getInstance() {
+    public static AppView getInstance() {
         if (instance == null) {
-            instance = new Graphics();
+            instance = new AppView();
         }
         return instance;
     }
 
-    public List<String> getLayout() {
-        return layout;
-    }
-
-    public void setLayout(List<String> layout) {
-        Graphics.layout = layout;
+    public void setRenderedRobot(Robot robot) {
+        this.robot = robot;
     }
 
     public void generateRoomString() {
 
         layout = new ArrayList<>();
-        List<List<Tile>> allTile = TileChart.getAllTile();
-        for (int y = 0; y < allTile.size(); y++) {
+        TileChart tileChart = TileChart.getInstance();
+        List<List<Tile>> allTile = tileChart.getAllTile();
+        for (List<Tile> tiles : allTile) {
             StringBuilder sb = new StringBuilder();
-            for (int x = 0; x < allTile.get(y).size(); x++) {
-                sb.append(allTile.get(y).get(x).getVisual());
+            for (Tile tile : tiles) {
+                sb.append(tile.getVisual());
             }
             layout.add(sb.toString());
         }
     }
 
-    public void generateRobotString(eu.kormos.robotcleaner.Robot robot) {
+    public void generateRobotString(Robot robot) {
         int robX = robot.getPosition().getX();
         int robY = robot.getPosition().getY();
 
@@ -63,7 +64,7 @@ public final class Graphics {
         layout.set(robY, sb.toString());
     }
 
-    public List<String> drawAll(Robot robot) {
+    public List<String> getAllVisual(Robot robot) {
         generateRoomString();
         generateRobotString(robot);
         return layout;
@@ -72,8 +73,7 @@ public final class Graphics {
     public void render() {
 
         textArea.setText("");
-        Graphics graphics = Graphics.getInstance();
-        List<String> layout = graphics.drawAll(robot);
+        List<String> layout = getAllVisual(robot);
         for (String row : layout) {
             textArea.append(row + "\n");
         }

@@ -1,12 +1,19 @@
 package eu.kormos.robotcleaner;
 
+import eu.kormos.robotcleaner.model.GraphicsModel;
+import eu.kormos.robotcleaner.controller.RobotController;
+import eu.kormos.robotcleaner.model.Room;
+import eu.kormos.robotcleaner.model.Position;
+import eu.kormos.robotcleaner.model.Robot;
+import eu.kormos.robotcleaner.view.AppView;
+
 import javax.swing.*;
 
 public class App {
 
-    Room room;
-    Robot robot;
-    Graphics graphics;
+    private Room room;
+    private Robot robot;
+    private AppView appView;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -19,24 +26,25 @@ public class App {
     }
 
     public void initialize() throws InterruptedException {
-        graphics = Graphics.getInstance();
+        room = new Room(50, 20);
+        room.generateRoomWithWalls();
+        robot = new Robot(new Position(5, 5), 0, 'O');
 
+        GraphicsModel gc = new GraphicsModel(robot,room);
+
+        appView = AppView.getInstance();
         run();
+
     }
 
     public void run() throws InterruptedException {
-        room = Room.getInstance();
-        //room.generateRectangularRoom(30,30);
-        room.generateRoomWithWalls(50, 20);
-        robot = new Robot(new Position(5, 5), 0, 'O');
-        graphics.setRenderedRobot(robot);
-        graphics.render();
 
-        RobotLogic robotLogic = new RobotLogic(robot);
-        //robotLogic.goToPosition(robot, new Position(robot.getPosition().getX(), robot.getPosition().getY() + 1));
-        robotLogic.goToPosition(robot,new Position(15,14));
-        //robotLogic.floodFillAlgorithm(new Position(robot.getPosition().getX(), robot.getPosition().getY()));
+        appView.setRenderedRobot(robot);
+        RobotController robotController = new RobotController(robot);
+        robotController.setTargetPosition(new Position(47,17));
+        robotController.goToTargetPosition();
 
-        graphics.render();
+        appView.render();
+
     }
 }
