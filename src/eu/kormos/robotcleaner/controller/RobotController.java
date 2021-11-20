@@ -80,12 +80,16 @@ public class RobotController {
 
     private Position getAdjacentMinPosition(Position targetPosition, Position robotPosition) {
         FloodFiller floodFiller = new FloodFiller(graphicsModel.getRoom().getTileChart());
+
         Map<Position, Integer> positionDistanceMap = floodFiller.floodFillPathFind(targetPosition, robotPosition);
         Map<Position, Integer> adjacentPositions = new HashMap<>();
 
         for (Position pos : getAdjacentPositions(robotPosition)) {
             if (positionDistanceMap.containsKey(pos))
                 adjacentPositions.put(pos, positionDistanceMap.get(pos));
+        }
+        if(adjacentPositions.isEmpty()){
+            return robotPosition;
         }
         Position min = Collections.min(adjacentPositions.entrySet(), Map.Entry.comparingByValue()).getKey();
         System.out.println(adjacentPositions);

@@ -57,9 +57,6 @@ public class FloodFiller {
             distance = weightPos.getDistance();
 
             Tile currentTile = tileChart.getTileAt(currentPos);
-            if (weightPos.getPosition().equals(robotPosition)) {
-               // return (allReachablePos);
-            }
             if (currentTile instanceof FloorTile) {
                 if (!(allReachablePos.containsKey(currentPos))) {
                     allReachablePos.put(currentPos,distance);

@@ -13,6 +13,8 @@ public class App {
 
         Room room = new Room(50, 20);
         room.generateRoomWithWalls();
+        //room.generateRandomRoom();
+        room.generateClutterObjects(2);
         Robot robot = new Robot(new Position(5, 5), 0, 'O');
 
         GraphicsModel graphicsModel = new GraphicsModel(robot, room);
