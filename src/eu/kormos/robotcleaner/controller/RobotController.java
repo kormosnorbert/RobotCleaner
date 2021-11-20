@@ -1,9 +1,10 @@
 package eu.kormos.robotcleaner.controller;
 
-import eu.kormos.robotcleaner.model.FloorTile;
+import eu.kormos.robotcleaner.model.GraphicsModel;
+import eu.kormos.robotcleaner.model.ds.FloorTile;
 import eu.kormos.robotcleaner.model.Position;
 import eu.kormos.robotcleaner.model.Robot;
-import eu.kormos.robotcleaner.model.TileChart;
+import eu.kormos.robotcleaner.model.ds.TileChart;
 import eu.kormos.robotcleaner.view.AppView;
 
 import javax.swing.Timer;
@@ -12,16 +13,15 @@ import java.util.*;
 
 public class RobotController {
 
-    private final Robot robot;
-    private final TileChart tileChart;
-    private final AppView appView;
-
+    private GraphicsModel graphicsModel;
+    private TileChart tileChart;
+    private Robot robot;
     private Position targetPosition;
 
-    public RobotController(Robot robot) {
-        this.robot = robot;
-        this.tileChart = TileChart.getInstance();
-        this.appView = AppView.getInstance();
+    public RobotController(GraphicsModel graphicsModel) {
+        this.graphicsModel = graphicsModel;
+        this.robot = graphicsModel.getRobot();
+        this.tileChart = graphicsModel.getRoom().getTileChart();
     }
 
     public Position getTargetPosition() {
@@ -30,6 +30,10 @@ public class RobotController {
 
     public void setTargetPosition(Position targetPosition) {
         this.targetPosition = targetPosition;
+    }
+
+    public void cleanTileAt(Position position){
+        ((FloorTile)graphicsModel.getRoom().getTileChart().getTileAt(position)).cleanTile();
     }
 
     public void cleanTheRoom(Robot robot) {
@@ -44,7 +48,6 @@ public class RobotController {
             robot.rotateRight();
         }
     }
-
     public void goToTargetPosition() {
 
         Timer timer = new Timer(50, e -> {
@@ -52,7 +55,7 @@ public class RobotController {
             if (!(robot.getPosition().equals(targetPosition))) {
                 Position nextPosition = getAdjacentMinPosition(targetPosition, robot.getPosition());
                 goToNextPosition(nextPosition);
-                appView.render();
+
             } else {
                 ((Timer) e.getSource()).stop();
             }
@@ -67,10 +70,11 @@ public class RobotController {
         );
         rotateToDirection(moveVector);
         robot.moveForward();
+        cleanTileAt(nextPosition);
     }
 
     private Position getAdjacentMinPosition(Position targetPosition, Position robotPosition) {
-        FloodFiller floodFiller = new FloodFiller();
+        FloodFiller floodFiller = new FloodFiller(graphicsModel.getRoom().getTileChart());
         Map<Position, Integer> positionDistanceMap = floodFiller.floodFillPathFind(targetPosition);
         Map<Position, Integer> adjacentPositions = new HashMap<>();
 

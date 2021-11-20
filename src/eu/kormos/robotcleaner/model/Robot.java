@@ -1,17 +1,18 @@
 package eu.kormos.robotcleaner.model;
 
+import eu.kormos.robotcleaner.model.ds.FloorTile;
+import eu.kormos.robotcleaner.model.ds.TileChart;
+
 public class Robot {
 
     private Position position;
     private int rotation;
     private char visual = 'O';
-    private TileChart tileChart;
 
     public Robot(Position position, int rotation, char visual) {
         this.position = position;
         this.rotation = rotation;
         this.visual = visual;
-        this.tileChart = TileChart.getInstance();
 
     }
 
@@ -56,7 +57,6 @@ public class Robot {
                 break;
             }
         }
-        ((FloorTile)tileChart.getTileAt(position)).cleanTile();
         System.out.println("Moved Forward");
     }
 

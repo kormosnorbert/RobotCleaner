@@ -1,10 +1,9 @@
 package eu.kormos.robotcleaner.model;
 
-import eu.kormos.robotcleaner.model.Robot;
-import eu.kormos.robotcleaner.model.Room;
-import eu.kormos.robotcleaner.model.Tile;
-import eu.kormos.robotcleaner.model.TileChart;
+import eu.kormos.robotcleaner.model.ds.Tile;
+import eu.kormos.robotcleaner.model.ds.TileChart;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class GraphicsModel {
     }
 
     public List<String> getRoomString() {
-        List<String> roomStringList = new ArrayList<>();
+        List<String> roomString = new ArrayList<>();
         TileChart tileChart = room.getTileChart();
         List<List<Tile>> allTile = tileChart.getAllTile();
         for (List<Tile> tiles : allTile) {
@@ -44,18 +43,23 @@ public class GraphicsModel {
             for (Tile tile : tiles) {
                 sb.append(tile.getVisual());
             }
-            roomStringList.add(sb.toString());
+            roomString.add(sb.toString());
         }
-        return roomStringList;
+        return roomString;
     }
 
-    public void insertRobotString(Robot robot,List<String> roomStringList) {
+    public void insertRobotString(List<String> roomString) {
         int robX = robot.getPosition().getX();
         int robY = robot.getPosition().getY();
 
-        StringBuilder sb = new StringBuilder(roomStringList.get(robY));
+        StringBuilder sb = new StringBuilder(roomString.get(robY));
         sb.setCharAt(robX*2, robot.getVisual());
-        roomStringList.set(robY, sb.toString());
+        roomString.set(robY, sb.toString());
+    }
+    public List<String> getRenderedModel(){
+        List<String> roomString = getRoomString();
+        insertRobotString(roomString);
+        return roomString;
     }
 
 }

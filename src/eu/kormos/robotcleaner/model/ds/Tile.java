@@ -1,4 +1,4 @@
-package eu.kormos.robotcleaner.model;
+package eu.kormos.robotcleaner.model.ds;
 
 public class Tile {
 

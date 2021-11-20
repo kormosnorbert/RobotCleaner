@@ -1,5 +1,10 @@
 package eu.kormos.robotcleaner.model;
 
+import eu.kormos.robotcleaner.model.ds.FloorTile;
+import eu.kormos.robotcleaner.model.ds.Tile;
+import eu.kormos.robotcleaner.model.ds.TileChart;
+import eu.kormos.robotcleaner.model.ds.WallTile;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +16,6 @@ public class Room {
     public Room(int width, int height) {
         this.width = width;
         this.height = height;
-        tileChart = TileChart.getInstance();
     }
 
     public int getWidth() {
@@ -31,6 +35,7 @@ public class Room {
     }
 
     public void generateRectangularRoom() {
+        tileChart = new TileChart();
         for (int y = 0; y < height; y++) {
             List<Tile> tiles = new ArrayList<>();
             for (int x = 0; x < width; x++) {

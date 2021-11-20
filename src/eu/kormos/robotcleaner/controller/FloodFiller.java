@@ -1,10 +1,11 @@
 package eu.kormos.robotcleaner.controller;
 
-import eu.kormos.robotcleaner.model.TileChart;
-import eu.kormos.robotcleaner.model.FloorTile;
+import eu.kormos.robotcleaner.model.GraphicsModel;
+import eu.kormos.robotcleaner.model.ds.TileChart;
+import eu.kormos.robotcleaner.model.ds.FloorTile;
 import eu.kormos.robotcleaner.model.Position;
-import eu.kormos.robotcleaner.model.Tile;
-import eu.kormos.robotcleaner.model.WeightedPosition;
+import eu.kormos.robotcleaner.model.ds.Tile;
+import eu.kormos.robotcleaner.model.ds.WeightedPosition;
 import eu.kormos.robotcleaner.view.AppView;
 
 import javax.swing.Timer;
@@ -12,19 +13,16 @@ import java.util.*;
 
 public class FloodFiller {
 
-    AppView appView = AppView.getInstance();
-
-    public FloodFiller() {
-
+    private TileChart tileChart;
+    public FloodFiller(TileChart tileChart) {
+        this.tileChart = tileChart;
     }
 
     public void floodFillStacked(Position initPosition) {
-        TileChart tileChart = TileChart.getInstance();
         List<Position> positionList = new ArrayList<>();
         positionList.add(initPosition);
 
         Timer timer = new Timer(1, e -> {
-            appView.render();
             if (!positionList.isEmpty()) {
                 Position position = positionList.remove(0);
                 Tile tile = tileChart.getTileAt(position);
@@ -48,7 +46,6 @@ public class FloodFiller {
         timer.start();
     }
     public Map<Position, Integer> floodFillPathFind(Position initPosition) {
-        TileChart tileChart = TileChart.getInstance();
         Map<Position, Integer> allReachableTile = new HashMap<>();
         List<WeightedPosition> posList = new ArrayList<>();
 
