@@ -1,6 +1,6 @@
 package eu.kormos.robotcleaner.model;
 
-import eu.kormos.robotcleaner.model.data.*;
+import eu.kormos.robotcleaner.model.datastructures.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,19 +55,19 @@ public class Room {
         }
     }
 
-    public void generateClutterObjects(int percentage) {
+    public void generateClutterObjects(int percentage, Position exceptHere) {
         Random r = new Random();
-
+        Position pos;
         List<List<Tile>> tc = tileChart.getAllTile();
         for (List<Tile> row : tc) {
             for (Tile tile : row) {
                 if (r.nextInt(100) < percentage) {
-                    Position pos = new Position(row.indexOf(tile), tc.indexOf(row));
+                    pos = new Position(row.indexOf(tile), tc.indexOf(row));
                     tileChart.setTileAt(pos, new WallTile());
                 }
-
             }
         }
+        tileChart.setTileAt(exceptHere, new FloorTile());
     }
 
     public void generateRoomWithWalls() {

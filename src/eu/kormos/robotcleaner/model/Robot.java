@@ -1,6 +1,6 @@
 package eu.kormos.robotcleaner.model;
 
-import eu.kormos.robotcleaner.model.data.Position;
+import eu.kormos.robotcleaner.model.datastructures.Position;
 
 public class Robot {
 

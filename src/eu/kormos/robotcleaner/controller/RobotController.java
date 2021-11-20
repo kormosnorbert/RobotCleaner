@@ -1,11 +1,11 @@
 package eu.kormos.robotcleaner.controller;
 
 import eu.kormos.robotcleaner.model.GraphicsModel;
-import eu.kormos.robotcleaner.model.data.FloorTile;
-import eu.kormos.robotcleaner.model.data.Position;
+import eu.kormos.robotcleaner.model.datastructures.FloorTile;
+import eu.kormos.robotcleaner.model.datastructures.Position;
 import eu.kormos.robotcleaner.model.Robot;
-import eu.kormos.robotcleaner.model.data.Tile;
-import eu.kormos.robotcleaner.model.data.TileChart;
+import eu.kormos.robotcleaner.model.datastructures.Tile;
+import eu.kormos.robotcleaner.model.datastructures.TileChart;
 import eu.kormos.robotcleaner.view.AppView;
 
 import javax.swing.Timer;
@@ -19,6 +19,7 @@ public class RobotController {
     private final TileChart tileChart;
     private final Robot robot;
     private Position targetPosition;
+    private FloodFiller floodFiller;
 
 
     public RobotController(AppView appView,GraphicsModel graphicsModel) {
@@ -26,6 +27,7 @@ public class RobotController {
         this.graphicsModel = graphicsModel;
         this.robot = graphicsModel.getRobot();
         this.tileChart = graphicsModel.getRoom().getTileChart();
+        this.floodFiller = new FloodFiller(graphicsModel.getRoom().getTileChart());
     }
 
     public void cleanTileAt(Position position){
@@ -33,7 +35,7 @@ public class RobotController {
     }
 
     public void cleanTheRoom() {
-
+            cleanTileAt(robot.getPosition());
             targetPosition = getNearestNotCleanTile();
             if (!(targetPosition.equals(robot.getPosition()))) {
                 goToTargetPosition();
@@ -41,24 +43,34 @@ public class RobotController {
     }
 
     private Position getNearestNotCleanTile() {
-
+        int minDistance = 9999;
         Position tilePos = new Position(robot.getPosition().getX(),robot.getPosition().getY());
         for (List<Tile> row: tileChart.getAllTile()){
             for (Tile tile : row) {
                 if(tile instanceof FloorTile && !((FloorTile) tile).isCleaned()){
-                    return tileChart.getTilePosition(tile);
+                    int distance = calculateDistance(robot.getPosition(), tileChart.getTilePosition(tile));
+                    if(distance<minDistance){
+                        minDistance = distance;
+                        tilePos = tileChart.getTilePosition(tile);
+                    }
+
+
                 }
             }
         }
         return tilePos;
     }
-
+    public int calculateDistance(Position pos1, Position pos2){
+        return (int)Math.ceil(Math.sqrt(Math.pow(pos1.getX()-pos2.getX(),2) + Math.pow(pos1.getY()- pos2.getY(),2)));
+    }
     public void goToTargetPosition() {
 
-        Timer timer = new Timer(20, e -> {
+        Timer timer = new Timer(50, e -> {
             if (!(robot.getPosition().equals(targetPosition))) {
                 Position nextPosition = getAdjacentMinPosition(targetPosition, robot.getPosition());
+                if(nextPosition != null){
                 goToNextPosition(nextPosition);
+                }
                 appView.renderModel(graphicsModel);
             } else {
                 ((Timer) e.getSource()).stop();
@@ -79,8 +91,6 @@ public class RobotController {
     }
 
     private Position getAdjacentMinPosition(Position targetPosition, Position robotPosition) {
-        FloodFiller floodFiller = new FloodFiller(graphicsModel.getRoom().getTileChart());
-
         Map<Position, Integer> positionDistanceMap = floodFiller.floodFillPathFind(targetPosition, robotPosition);
         Map<Position, Integer> adjacentPositions = new HashMap<>();
 
@@ -92,7 +102,6 @@ public class RobotController {
             return robotPosition;
         }
         Position min = Collections.min(adjacentPositions.entrySet(), Map.Entry.comparingByValue()).getKey();
-        System.out.println(adjacentPositions);
         return min;
 
     }

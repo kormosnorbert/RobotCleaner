@@ -1,7 +1,7 @@
 package eu.kormos.robotcleaner.model;
 
-import eu.kormos.robotcleaner.model.data.Tile;
-import eu.kormos.robotcleaner.model.data.TileChart;
+import eu.kormos.robotcleaner.model.datastructures.Tile;
+import eu.kormos.robotcleaner.model.datastructures.TileChart;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +55,7 @@ public class GraphicsModel {
         sb.setCharAt(robX*2, robot.getVisual());
         roomString.set(robY, sb.toString());
     }
+
     public List<String> getRenderedModel(){
         List<String> roomString = getRoomString();
         insertRobotString(roomString);

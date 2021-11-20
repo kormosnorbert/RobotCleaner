@@ -1,11 +1,11 @@
-package eu.kormos.robotcleaner.model.data;
+package eu.kormos.robotcleaner.model.datastructures;
 
 public class FloorTile extends Tile {
 
     private boolean cleaned;
 
     public FloorTile() {
-        super(": ");
+        super(". ");
     }
 
     public boolean isCleaned() {

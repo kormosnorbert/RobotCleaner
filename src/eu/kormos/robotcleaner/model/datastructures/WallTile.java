@@ -1,4 +1,4 @@
-package eu.kormos.robotcleaner.model.data;
+package eu.kormos.robotcleaner.model.datastructures;
 
 public class WallTile extends Tile {
 

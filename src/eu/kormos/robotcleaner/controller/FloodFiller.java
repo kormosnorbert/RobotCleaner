@@ -1,7 +1,7 @@
 package eu.kormos.robotcleaner.controller;
 
-import eu.kormos.robotcleaner.model.data.*;
-import eu.kormos.robotcleaner.model.data.Position;
+import eu.kormos.robotcleaner.model.datastructures.*;
+import eu.kormos.robotcleaner.model.datastructures.Position;
 
 import javax.swing.Timer;
 import java.util.*;
@@ -64,7 +64,7 @@ public class FloodFiller {
                 }
             }
         }
-        incWeightOfCleanTile(allReachablePos);
+        //incWeightOfCleanTile(allReachablePos);
         return allReachablePos;
     }
 
