@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="RobotCleaner:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/RobotCleaner_jar</output-path>
+    <root id="archive" name="VacuumCleaner.jar">
+      <element id="module-output" name="RobotCleaner" />
+    </root>
+  </artifact>
+</component>

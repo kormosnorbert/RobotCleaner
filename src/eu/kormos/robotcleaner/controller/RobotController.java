@@ -65,10 +65,10 @@ public class RobotController {
     }
     public void goToTargetPosition() {
 
-        Timer timer = new Timer(50, e -> {
+        Timer timer = new Timer(100, e -> {
             if (!(robot.getPosition().equals(targetPosition))) {
                 Position nextPosition = getAdjacentMinPosition(targetPosition, robot.getPosition());
-                if(nextPosition != null){
+                if(!(nextPosition.equals(robot.getPosition()))){
                 goToNextPosition(nextPosition);
                 }
                 appView.renderModel(graphicsModel);

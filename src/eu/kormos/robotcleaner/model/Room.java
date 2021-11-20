@@ -73,7 +73,7 @@ public class Room {
     public void generateRoomWithWalls() {
         generateRectangularRoom();
         generateWall(new Position(32, 0), new Position(34, 17));
-        generateWall(new Position(0, 8), new Position(30, 10));
+        generateWall(new Position(0, 11), new Position(30, 13));
         generateWall(new Position(11, 10), new Position(13, 17));
         generateWall(new Position(40, 8), new Position(43, 15));
     }

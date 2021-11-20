@@ -17,7 +17,7 @@ public class App {
 
         Robot robot = new Robot(new Position(5, 5), 0, 'O');
 
-        room.generateClutterObjects(1, robot.getPosition());
+        room.generateClutterObjects(3, robot.getPosition());
 
         GraphicsModel graphicsModel = new GraphicsModel(robot, room);
         AppView appView = new AppView();
