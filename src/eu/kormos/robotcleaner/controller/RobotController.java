@@ -1,63 +1,68 @@
 package eu.kormos.robotcleaner.controller;
 
 import eu.kormos.robotcleaner.model.GraphicsModel;
-import eu.kormos.robotcleaner.model.ds.FloorTile;
-import eu.kormos.robotcleaner.model.Position;
+import eu.kormos.robotcleaner.model.data.FloorTile;
+import eu.kormos.robotcleaner.model.data.Position;
 import eu.kormos.robotcleaner.model.Robot;
-import eu.kormos.robotcleaner.model.ds.TileChart;
+import eu.kormos.robotcleaner.model.data.Tile;
+import eu.kormos.robotcleaner.model.data.TileChart;
 import eu.kormos.robotcleaner.view.AppView;
 
 import javax.swing.Timer;
+
 import java.util.List;
 import java.util.*;
 
 public class RobotController {
-
-    private GraphicsModel graphicsModel;
-    private TileChart tileChart;
-    private Robot robot;
+    private final AppView appView;
+    private final GraphicsModel graphicsModel;
+    private final TileChart tileChart;
+    private final Robot robot;
     private Position targetPosition;
 
-    public RobotController(GraphicsModel graphicsModel) {
+
+    public RobotController(AppView appView,GraphicsModel graphicsModel) {
+        this.appView = appView;
         this.graphicsModel = graphicsModel;
         this.robot = graphicsModel.getRobot();
         this.tileChart = graphicsModel.getRoom().getTileChart();
-    }
-
-    public Position getTargetPosition() {
-        return targetPosition;
-    }
-
-    public void setTargetPosition(Position targetPosition) {
-        this.targetPosition = targetPosition;
     }
 
     public void cleanTileAt(Position position){
         ((FloorTile)graphicsModel.getRoom().getTileChart().getTileAt(position)).cleanTile();
     }
 
-    public void cleanTheRoom(Robot robot) {
-        for (int i = 0; i < 14; i++) {
-            for (int j = 0; j < i / 2; j++) {
-                int x = robot.getPosition().getX();
-                int y = robot.getPosition().getY();
-                FloorTile floorTile = (FloorTile) tileChart.getTileAt(new Position(x, y));
-                floorTile.cleanTile();
-                robot.moveForward();
+    public void cleanTheRoom() {
+
+            targetPosition = getNearestNotCleanTile();
+            if (!(targetPosition.equals(robot.getPosition()))) {
+                goToTargetPosition();
             }
-            robot.rotateRight();
-        }
     }
+
+    private Position getNearestNotCleanTile() {
+
+        Position tilePos = new Position(robot.getPosition().getX(),robot.getPosition().getY());
+        for (List<Tile> row: tileChart.getAllTile()){
+            for (Tile tile : row) {
+                if(tile instanceof FloorTile && !((FloorTile) tile).isCleaned()){
+                    return tileChart.getTilePosition(tile);
+                }
+            }
+        }
+        return tilePos;
+    }
+
     public void goToTargetPosition() {
 
-        Timer timer = new Timer(50, e -> {
-
+        Timer timer = new Timer(20, e -> {
             if (!(robot.getPosition().equals(targetPosition))) {
                 Position nextPosition = getAdjacentMinPosition(targetPosition, robot.getPosition());
                 goToNextPosition(nextPosition);
-
+                appView.renderModel(graphicsModel);
             } else {
                 ((Timer) e.getSource()).stop();
+                cleanTheRoom();
             }
         });
         timer.start();
@@ -75,7 +80,7 @@ public class RobotController {
 
     private Position getAdjacentMinPosition(Position targetPosition, Position robotPosition) {
         FloodFiller floodFiller = new FloodFiller(graphicsModel.getRoom().getTileChart());
-        Map<Position, Integer> positionDistanceMap = floodFiller.floodFillPathFind(targetPosition);
+        Map<Position, Integer> positionDistanceMap = floodFiller.floodFillPathFind(targetPosition, robotPosition);
         Map<Position, Integer> adjacentPositions = new HashMap<>();
 
         for (Position pos : getAdjacentPositions(robotPosition)) {
@@ -83,7 +88,6 @@ public class RobotController {
                 adjacentPositions.put(pos, positionDistanceMap.get(pos));
         }
         Position min = Collections.min(adjacentPositions.entrySet(), Map.Entry.comparingByValue()).getKey();
-        System.out.println(min);
         System.out.println(adjacentPositions);
         return min;
 

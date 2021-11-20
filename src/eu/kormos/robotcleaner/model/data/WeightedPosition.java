@@ -1,6 +1,4 @@
-package eu.kormos.robotcleaner.model.ds;
-
-import eu.kormos.robotcleaner.model.Position;
+package eu.kormos.robotcleaner.model.data;
 
 import java.util.Objects;
 

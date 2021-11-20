@@ -2,7 +2,7 @@ package eu.kormos.robotcleaner;
 
 import eu.kormos.robotcleaner.controller.GraphicsController;
 import eu.kormos.robotcleaner.model.GraphicsModel;
-import eu.kormos.robotcleaner.model.Position;
+import eu.kormos.robotcleaner.model.data.Position;
 import eu.kormos.robotcleaner.model.Robot;
 import eu.kormos.robotcleaner.model.Room;
 import eu.kormos.robotcleaner.view.AppView;

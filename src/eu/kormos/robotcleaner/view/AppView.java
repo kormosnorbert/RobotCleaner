@@ -1,6 +1,5 @@
 package eu.kormos.robotcleaner.view;
 
-import eu.kormos.robotcleaner.controller.ActionController;
 import eu.kormos.robotcleaner.model.GraphicsModel;
 
 import javax.swing.*;
@@ -14,10 +13,13 @@ public class AppView {
     private JPanel panel;
     private JButton runButton;
 
+    private JTextField posXTextField;
+
+    private JTextField posYTextField;
     public AppView() {
         JFrame frame = new JFrame("Application");
         frame.setContentPane(panel);
-        frame.setSize(1000, 500);
+        frame.setSize(1000, 700);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
@@ -30,6 +32,14 @@ public class AppView {
         return runButton;
     }
 
+    public JTextField getPosXTextField() {
+        return posXTextField;
+    }
+
+    public JTextField getPosYTextField() {
+        return posYTextField;
+    }
+
     public void renderModel(GraphicsModel graphicsModel){
         textArea.setText("");
         List<String> roomString = graphicsModel.getRenderedModel();
@@ -38,6 +48,5 @@ public class AppView {
         }
         Font font = new Font("Monospaced", Font.PLAIN, 15);
         textArea.setFont(font);
-        System.out.println("Rendered");
     }
 }

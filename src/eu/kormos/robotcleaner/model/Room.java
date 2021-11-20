@@ -1,9 +1,6 @@
 package eu.kormos.robotcleaner.model;
 
-import eu.kormos.robotcleaner.model.ds.FloorTile;
-import eu.kormos.robotcleaner.model.ds.Tile;
-import eu.kormos.robotcleaner.model.ds.TileChart;
-import eu.kormos.robotcleaner.model.ds.WallTile;
+import eu.kormos.robotcleaner.model.data.*;
 
 import java.util.ArrayList;
 import java.util.List;

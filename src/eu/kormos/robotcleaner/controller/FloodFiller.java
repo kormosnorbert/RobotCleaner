@@ -1,12 +1,7 @@
 package eu.kormos.robotcleaner.controller;
 
-import eu.kormos.robotcleaner.model.GraphicsModel;
-import eu.kormos.robotcleaner.model.ds.TileChart;
-import eu.kormos.robotcleaner.model.ds.FloorTile;
-import eu.kormos.robotcleaner.model.Position;
-import eu.kormos.robotcleaner.model.ds.Tile;
-import eu.kormos.robotcleaner.model.ds.WeightedPosition;
-import eu.kormos.robotcleaner.view.AppView;
+import eu.kormos.robotcleaner.model.data.*;
+import eu.kormos.robotcleaner.model.data.Position;
 
 import javax.swing.Timer;
 import java.util.*;
@@ -14,6 +9,7 @@ import java.util.*;
 public class FloodFiller {
 
     private TileChart tileChart;
+
     public FloodFiller(TileChart tileChart) {
         this.tileChart = tileChart;
     }
@@ -38,39 +34,68 @@ public class FloodFiller {
                         positionList.add(new Position(position.getX() - 1, position.getY()));
                     }
                 }
-            }
-            else {
-                ((Timer)e.getSource()).stop();
+            } else {
+                ((Timer) e.getSource()).stop();
             }
         });
         timer.start();
     }
-    public Map<Position, Integer> floodFillPathFind(Position initPosition) {
-        Map<Position, Integer> allReachableTile = new HashMap<>();
-        List<WeightedPosition> posList = new ArrayList<>();
+
+    public Map<Position, Integer> floodFillPathFind(Position initPosition, Position robotPosition) {
+
+        Map<Position, Integer> allReachablePos = new HashMap<>();
+        List<WeightedPosition> nextPosList = new ArrayList<>();
 
         Position currentPos = initPosition;
         Integer distance = 0;
 
-        posList.add(new WeightedPosition(currentPos,distance));
+        nextPosList.add(new WeightedPosition(currentPos, distance));
 
-            while (!posList.isEmpty()) {
+        while (!nextPosList.isEmpty()) {
+            WeightedPosition weightPos = nextPosList.remove(0);
+            currentPos = weightPos.getPosition();
+            distance = weightPos.getDistance();
 
-                WeightedPosition weigthPos = posList.remove(0);
-                currentPos = weigthPos.getPosition();
-                distance = weigthPos.getDistance();
-                Tile currentTile = tileChart.getTileAt(currentPos);
-
-                if (currentTile instanceof FloorTile) {
-                    if (!(allReachableTile.containsKey(currentPos))) {
-                        allReachableTile.put(currentPos,distance);
-                        posList.add(new WeightedPosition(new Position(currentPos.getX() , currentPos.getY() + 1),distance+1));
-                        posList.add(new WeightedPosition(new Position(currentPos.getX()+1, currentPos.getY()),distance+1));
-                        posList.add(new WeightedPosition(new Position(currentPos.getX(), currentPos.getY() - 1),distance+1));
-                        posList.add(new WeightedPosition(new Position(currentPos.getX()-1, currentPos.getY()),distance+1));
-                    }
+            Tile currentTile = tileChart.getTileAt(currentPos);
+            if (weightPos.getPosition().equals(robotPosition)) {
+               // return (allReachablePos);
+            }
+            if (currentTile instanceof FloorTile) {
+                if (!(allReachablePos.containsKey(currentPos))) {
+                    allReachablePos.put(currentPos,distance);
+                    nextPosList.addAll(addSurroundingTilesToList(currentPos, distance));
                 }
             }
-            return allReachableTile;
+        }
+        incWeightOfCleanTile(allReachablePos);
+        return allReachablePos;
     }
+
+    public List<WeightedPosition> addSurroundingTilesToList(Position currentPos, Integer distance) {
+        List<WeightedPosition> list = new ArrayList<>();
+        list.add(new WeightedPosition(new Position(currentPos.getX(), currentPos.getY() + 1), distance + 1));
+        list.add(new WeightedPosition(new Position(currentPos.getX() - 1, currentPos.getY()), distance + 1));
+        list.add(new WeightedPosition(new Position(currentPos.getX(), currentPos.getY() - 1), distance + 1));
+        list.add(new WeightedPosition(new Position(currentPos.getX() + 1, currentPos.getY()), distance + 1));
+        removeWallTiles(list);
+        return list;
+    }
+
+    public void removeWallTiles(List<WeightedPosition> list) {
+        list.removeIf(wp -> !(tileChart.getTileAt(wp.getPosition()) instanceof FloorTile));
+    }
+
+    public void incWeightOfCleanTile(Map<Position, Integer> map) {
+
+        for (Map.Entry<Position, Integer> entry : map.entrySet()){
+            if(tileChart.getTileAt(entry.getKey()) instanceof FloorTile) {
+                FloorTile ft = (FloorTile) tileChart.getTileAt(entry.getKey());
+                if (ft.isCleaned()) {
+                    entry.setValue(entry.getValue() + 5);
+
+                }
+            }
+        }
+    }
+
 }

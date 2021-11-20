@@ -1,7 +1,7 @@
 package eu.kormos.robotcleaner.controller;
 
 import eu.kormos.robotcleaner.model.GraphicsModel;
-import eu.kormos.robotcleaner.model.Position;
+import eu.kormos.robotcleaner.model.data.Position;
 import eu.kormos.robotcleaner.view.AppView;
 
 import javax.swing.*;
@@ -10,6 +10,8 @@ public class GraphicsController {
 
     private final AppView appView;
     private final GraphicsModel graphicsModel;
+
+    RobotController robotController;
 
     public GraphicsController(AppView appView, GraphicsModel graphicsModel){
         this.appView = appView;
@@ -21,19 +23,26 @@ public class GraphicsController {
         initRobot();
         setUpListeners();
     }
+
     public void setUpListeners(){
         JButton runButton = appView.getRunButton();
-        runButton.addActionListener(new ActionController(appView,graphicsModel));
+        runButton.addActionListener(e -> {
+            robotController.cleanTheRoom();
+        });
     }
 
     public void initRobot(){
-        RobotController robotController = new RobotController(graphicsModel);
-        robotController.setTargetPosition(new Position(47, 17));
-        robotController.goToTargetPosition();
+        robotController = new RobotController(appView,graphicsModel);
     }
 
     public void initGraphics(){
         appView.renderModel(graphicsModel);
+    }
+    public Position getManualPosition(){
+        int x = Integer.parseInt(appView.getPosXTextField().getText());
+        int y = Integer.parseInt(appView.getPosYTextField().getText());
+
+        return new Position(x,y);
     }
 
 }

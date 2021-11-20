@@ -1,6 +1,4 @@
-package eu.kormos.robotcleaner.model.ds;
-
-import eu.kormos.robotcleaner.model.Position;
+package eu.kormos.robotcleaner.model.data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,5 +29,19 @@ public class TileChart {
 
     public void addRow(List<Tile> tiles){
         allTile.add(tiles);
+    }
+
+    public Position getTilePosition(Tile tile){
+        int x = 0;
+        int y = 0;
+        for (List<Tile> row: getAllTile()){
+            for (Tile t : row) {
+                if(t.equals(tile)){
+                x = row.indexOf(tile);
+                y = getAllTile().indexOf(row);
+                }
+            }
+        }
+        return new Position(x,y);
     }
 }

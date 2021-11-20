@@ -1,7 +1,6 @@
 package eu.kormos.robotcleaner.model;
 
-import eu.kormos.robotcleaner.model.ds.FloorTile;
-import eu.kormos.robotcleaner.model.ds.TileChart;
+import eu.kormos.robotcleaner.model.data.Position;
 
 public class Robot {
 
@@ -57,16 +56,15 @@ public class Robot {
                 break;
             }
         }
-        System.out.println("Moved Forward");
+
     }
 
     public void rotateLeft(){
         this.rotation = (this.rotation == 0) ? 270 : this.rotation-90;
-        System.out.println("Rotated Left");
+
     }
     public void rotateRight(){
         this.rotation = (this.rotation == 270) ? 0 : this.rotation+90;
-        System.out.println("Rotated Right");
     }
 
 
