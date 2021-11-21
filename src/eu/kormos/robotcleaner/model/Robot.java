@@ -4,15 +4,21 @@ import eu.kormos.robotcleaner.model.datastructures.Position;
 
 public class Robot {
 
-    private Position position;
+    private final Position position;
+    private final Position chargerPosition;
     private int rotation;
-    private char visual = 'O';
+    private char visual;
 
-    public Robot(Position position, int rotation, char visual) {
+    public Robot(Position position, Position chargerPosition, int rotation, char visual) {
         this.position = position;
+        this.chargerPosition = chargerPosition;
         this.rotation = rotation;
         this.visual = visual;
 
+    }
+
+    public Position getChargerPosition() {
+        return chargerPosition;
     }
 
     public Position getPosition() {

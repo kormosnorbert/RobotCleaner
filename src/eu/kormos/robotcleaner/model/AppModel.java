@@ -1,20 +1,19 @@
 package eu.kormos.robotcleaner.model;
 
+import eu.kormos.robotcleaner.model.datastructures.Position;
 import eu.kormos.robotcleaner.model.datastructures.Tile;
 import eu.kormos.robotcleaner.model.datastructures.TileChart;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphicsModel {
+public class AppModel {
 
     private Robot robot;
     private Room room;
 
-    public GraphicsModel(Robot robot, Room room) {
-        this.robot = robot;
+    public AppModel() {
 
-        this.room = room;
     }
 
     public Robot getRobot() {
@@ -47,19 +46,19 @@ public class GraphicsModel {
         return roomString;
     }
 
-    public void insertRobotString(List<String> roomString) {
-        int robX = robot.getPosition().getX();
-        int robY = robot.getPosition().getY();
+    public void insertCharToPosition(List<String> roomString, Position pos, char c) {
+        int posX = pos.getX();
+        int posY = pos.getY();
 
-        StringBuilder sb = new StringBuilder(roomString.get(robY));
-        sb.setCharAt(robX*2, robot.getVisual());
-        roomString.set(robY, sb.toString());
+        StringBuilder sb = new StringBuilder(roomString.get(posY));
+        sb.setCharAt(posX*2, c);
+        roomString.set(posY, sb.toString());
     }
 
     public List<String> getRenderedModel(){
         List<String> roomString = getRoomString();
-        insertRobotString(roomString);
+        insertCharToPosition(roomString, robot.getChargerPosition(), 'x');
+        insertCharToPosition(roomString, robot.getPosition(), robot.getVisual());
         return roomString;
     }
-
 }

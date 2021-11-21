@@ -41,31 +41,27 @@ public class FloodFiller {
         timer.start();
     }
 
-    public Map<Position, Integer> floodFillPathFind(Position initPosition, Position robotPosition) {
+    public Map<Position, Integer> floodFillPathFind(Position currentPos, Position robotPos) {
 
         Map<Position, Integer> allReachablePos = new HashMap<>();
         List<WeightedPosition> nextPosList = new ArrayList<>();
 
-        Position currentPos = initPosition;
-        Integer distance = 0;
+        int distance = 0;
 
         nextPosList.add(new WeightedPosition(currentPos, distance));
 
-        while (!nextPosList.isEmpty()) {
+        while (!(nextPosList.isEmpty() || (currentPos.equals(robotPos)))) {
             WeightedPosition weightPos = nextPosList.remove(0);
             currentPos = weightPos.getPosition();
             distance = weightPos.getDistance();
 
             Tile currentTile = tileChart.getTileAt(currentPos);
-            if (currentTile instanceof FloorTile) {
+            //if (currentTile instanceof FloorTile) {
                 if (!(allReachablePos.containsKey(currentPos))) {
                     allReachablePos.put(currentPos,distance);
                     nextPosList.addAll(getSurroundingTilesToList(currentPos, distance));
                 }
-            }
-            if(currentPos.equals(robotPosition)){
-                break;
-            }
+            //}
         }
         incWeightOfCleanTile(allReachablePos);
         return allReachablePos;
@@ -91,7 +87,7 @@ public class FloodFiller {
             if(tileChart.getTileAt(entry.getKey()) instanceof FloorTile) {
                 FloorTile ft = (FloorTile) tileChart.getTileAt(entry.getKey());
                 if (ft.isCleaned()) {
-                    entry.setValue(entry.getValue() + 3);
+                    entry.setValue(entry.getValue() + 10);
                 }
             }
         }

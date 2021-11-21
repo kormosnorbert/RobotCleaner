@@ -1,6 +1,6 @@
 package eu.kormos.robotcleaner.view;
 
-import eu.kormos.robotcleaner.model.GraphicsModel;
+import eu.kormos.robotcleaner.model.AppModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,41 +8,45 @@ import java.awt.*;
 import java.util.List;
 
 public class AppView {
+    private JFrame frame;
 
     private JTextArea textArea;
     private JPanel panel;
     private JButton runButton;
+    private JButton restartButton;
+    private JButton cleanAllButton;
+    private AppModel appModel;
 
-    private JTextField posXTextField;
-
-    private JTextField posYTextField;
     public AppView() {
-        JFrame frame = new JFrame("Application");
+
+        frame = new JFrame("Application");
         frame.setContentPane(panel);
-        frame.setSize(1000, 700);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
+    public JFrame getFrame() {
+        return frame;
+    }
 
-    public JTextArea getTextArea() {
-        return textArea;
+    public void setAppModel(AppModel appModel) {
+        this.appModel = appModel;
     }
 
     public JButton getRunButton() {
         return runButton;
     }
 
-    public JTextField getPosXTextField() {
-        return posXTextField;
+    public JButton getResetButton() {
+        return restartButton;
     }
 
-    public JTextField getPosYTextField() {
-        return posYTextField;
+    public JButton getCleanAllButton() {
+        return cleanAllButton;
     }
 
-    public void renderModel(GraphicsModel graphicsModel){
+    public void renderModel(){
         textArea.setText("");
-        List<String> roomString = graphicsModel.getRenderedModel();
+        List<String> roomString = appModel.getRenderedModel();
         for (String row : roomString) {
             textArea.append(row + "\n");
         }

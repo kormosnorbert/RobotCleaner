@@ -28,10 +28,6 @@ public class Room {
         return tileChart;
     }
 
-    public void setTileChart(TileChart tileChart) {
-        this.tileChart = tileChart;
-    }
-
     public void generateRectangularRoom() {
         tileChart = new TileChart();
         for (int y = 0; y < height; y++) {
@@ -72,15 +68,11 @@ public class Room {
 
     public void generateRoomWithWalls() {
         generateRectangularRoom();
-        generateWall(new Position(32, 0), new Position(34, 17));
-        generateWall(new Position(0, 11), new Position(30, 13));
-        generateWall(new Position(11, 10), new Position(13, 17));
-        generateWall(new Position(40, 8), new Position(43, 15));
-    }
-
-    public void generateRandomRoom() {
-        Random r = new Random();
-        generateRectangularRoom();
+        //generateWall(new Position(32, 0), new Position(34, 17));
+        generateWall(new Position(0, 10), new Position(13, 13));
+        generateWall(new Position(20, 9), new Position(30, 12));
+        generateWall(new Position(10, 10), new Position(13, 17));
+       // generateWall(new Position(40, 8), new Position(43, 15));
     }
 
 
