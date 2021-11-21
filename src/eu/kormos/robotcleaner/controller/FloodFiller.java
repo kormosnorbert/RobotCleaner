@@ -3,7 +3,6 @@ package eu.kormos.robotcleaner.controller;
 import eu.kormos.robotcleaner.model.datastructures.*;
 import eu.kormos.robotcleaner.model.datastructures.Position;
 
-import javax.swing.Timer;
 import java.util.*;
 
 public class FloodFiller {
@@ -12,33 +11,6 @@ public class FloodFiller {
 
     public FloodFiller(TileChart tileChart) {
         this.tileChart = tileChart;
-    }
-
-    public void floodFillStacked(Position initPosition) {
-        List<Position> positionList = new ArrayList<>();
-        positionList.add(initPosition);
-
-        Timer timer = new Timer(1, e -> {
-            if (!positionList.isEmpty()) {
-                Position position = positionList.remove(0);
-                Tile tile = tileChart.getTileAt(position);
-
-                if (tile instanceof FloorTile) {
-                    FloorTile floorTile = (FloorTile) tile;
-
-                    if (!(floorTile.isCleaned())) {
-                        floorTile.cleanTile();
-                        positionList.add(new Position(position.getX(), position.getY() + 1));
-                        positionList.add(new Position(position.getX() + 1, position.getY()));
-                        positionList.add(new Position(position.getX(), position.getY() - 1));
-                        positionList.add(new Position(position.getX() - 1, position.getY()));
-                    }
-                }
-            } else {
-                ((Timer) e.getSource()).stop();
-            }
-        });
-        timer.start();
     }
 
     public Map<Position, Integer> floodFillPathFind(Position currentPos, Position robotPos) {
@@ -55,13 +27,10 @@ public class FloodFiller {
             currentPos = weightPos.getPosition();
             distance = weightPos.getDistance();
 
-            Tile currentTile = tileChart.getTileAt(currentPos);
-            //if (currentTile instanceof FloorTile) {
                 if (!(allReachablePos.containsKey(currentPos))) {
                     allReachablePos.put(currentPos,distance);
                     nextPosList.addAll(getSurroundingTilesToList(currentPos, distance));
                 }
-            //}
         }
         incWeightOfCleanTile(allReachablePos);
         return allReachablePos;

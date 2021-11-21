@@ -33,7 +33,8 @@ public class AppController {
         appModel.setRoom(room);
         appModel.setRobot(robot);
         room.generateRoomWithWalls();
-        room.generateClutterObjects(1, robot.getPosition());
+        //room.generateClutterObjects(1, robot.getPosition());
+        room.generateNonRandomClutterObjects();
         robotController = new RobotController(appView, appModel);
     }
 

@@ -65,14 +65,24 @@ public class Room {
         }
         tileChart.setTileAt(exceptHere, new FloorTile());
     }
+    public void generateNonRandomClutterObjects() {
+        tileChart.setTileAt(new Position(10,5),new WallTile());
+        tileChart.setTileAt(new Position(28,6),new WallTile());
+        tileChart.setTileAt(new Position(25,1),new WallTile());
+        tileChart.setTileAt(new Position(10,6),new WallTile());
+        tileChart.setTileAt(new Position(11,7),new WallTile());
+        tileChart.setTileAt(new Position(3,17),new WallTile());
+        tileChart.setTileAt(new Position(25,15),new WallTile());
+
+
+    }
 
     public void generateRoomWithWalls() {
         generateRectangularRoom();
-        //generateWall(new Position(32, 0), new Position(34, 17));
         generateWall(new Position(0, 10), new Position(13, 13));
         generateWall(new Position(20, 9), new Position(30, 12));
         generateWall(new Position(10, 10), new Position(13, 17));
-       // generateWall(new Position(40, 8), new Position(43, 15));
+
     }
 
 
