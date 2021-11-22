@@ -31,6 +31,14 @@ public class RobotController {
         this.floodFiller = new FloodFiller(appModel.getRoom().getTileChart());
     }
 
+    public Boolean getDone() {
+        return isDone;
+    }
+
+    public void setDone(Boolean done) {
+        isDone = done;
+    }
+
     public void cleanTileAt(Position position) {
         ((FloorTile) appModel.getRoom().getTileChart().getTileAt(position)).cleanTile();
     }

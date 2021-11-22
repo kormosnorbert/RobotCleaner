@@ -13,7 +13,7 @@ public class AppView {
     private JTextArea textArea;
     private JPanel panel;
     private JButton runButton;
-    private JButton restartButton;
+    private JButton resetRoomButton;
     private JButton cleanAllButton;
     private AppModel appModel;
 
@@ -36,8 +36,8 @@ public class AppView {
         return runButton;
     }
 
-    public JButton getResetButton() {
-        return restartButton;
+    public JButton getResetRoomButton() {
+        return resetRoomButton;
     }
 
     public JButton getCleanAllButton() {

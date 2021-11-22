@@ -20,4 +20,8 @@ public class FloorTile extends Tile {
         this.cleaned = true;
         super.setVisual("  ");
     }
+    public void unCleanTile(){
+        this.cleaned = false;
+        super.setVisual(". ");
+    }
 }

@@ -7,7 +7,7 @@ public class Robot {
     private final Position position;
     private final Position chargerPosition;
     private int rotation;
-    private char visual;
+    private final char visual;
 
     public Robot(Position position, Position chargerPosition, int rotation, char visual) {
         this.position = position;
@@ -25,9 +25,7 @@ public class Robot {
         return this.position;
     }
 
-    public void setRotation(int rotation) {
-        this.rotation = rotation;
-    }
+
 
     public int getRotation() {
         return this.rotation;
@@ -35,10 +33,6 @@ public class Robot {
 
     public char getVisual() {
         return visual;
-    }
-
-    public void setVisual(char visual) {
-        this.visual = visual;
     }
 
     public void moveForward(){

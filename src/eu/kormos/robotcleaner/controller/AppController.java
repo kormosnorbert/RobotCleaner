@@ -1,6 +1,5 @@
 package eu.kormos.robotcleaner.controller;
 
-import eu.kormos.robotcleaner.App;
 import eu.kormos.robotcleaner.model.AppModel;
 import eu.kormos.robotcleaner.model.Robot;
 import eu.kormos.robotcleaner.model.Room;
@@ -15,6 +14,7 @@ public class AppController {
     private AppModel appModel;
 
     private RobotController robotController;
+    Robot robot;
 
     public AppController(AppView appView, AppModel appModel) {
         this.appView = appView;
@@ -28,7 +28,7 @@ public class AppController {
 
     public void initModel() {
         Room room = new Room(30, 20);
-        Robot robot = new Robot(new Position(1, 5), new Position(1, 5), 0, 'O');
+        robot = new Robot(new Position(1, 5), new Position(1, 5), 0, 'O');
 
         appModel.setRoom(room);
         appModel.setRobot(robot);
@@ -48,16 +48,17 @@ public class AppController {
 
     public void setUpListeners() {
         JButton runButton = appView.getRunButton();
-        JButton resetButton = appView.getResetButton();
+        JButton resetRoomButton = appView.getResetRoomButton();
         JButton cleanAllButton = appView.getCleanAllButton();
 
         runButton.addActionListener(e -> {
+            robotController.setDone(false);
             robotController.cleanTheRoom();
         });
 
-        resetButton.addActionListener(e -> {
-            appView.getFrame().dispose();
-            App.main(null);
+        resetRoomButton.addActionListener(e -> {
+            appModel.getRoom().getTileChart().unCleanAllTile();
+            appView.renderModel();
         });
         cleanAllButton.addActionListener(e -> {
             appModel.getRoom().getTileChart().cleanAllTile();

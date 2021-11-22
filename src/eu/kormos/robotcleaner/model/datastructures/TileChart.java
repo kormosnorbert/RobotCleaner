@@ -50,4 +50,13 @@ public class TileChart {
             }
         }
     }
+    public void unCleanAllTile() {
+        for (List<Tile> row : allTile) {
+            for (Tile tile : row) {
+                if (tile instanceof FloorTile) {
+                    ((FloorTile) tile).unCleanTile();
+                }
+            }
+        }
+    }
 }
